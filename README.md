@@ -185,3 +185,23 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+## Portable model paths
+
+Run `streamlit run resume.py` from this repository after installing the dependencies.
+The application resolves model paths relative to the repository, not the current
+working directory or a particular Windows user directory. It first looks for all
+three files (`vectorizer.pkl`, `label_encoder.pkl`, `knn_model.pkl`) in `models/`,
+then supports the existing `.ipynb_checkpoints/` location for compatibility.
+An incomplete set is not mixed with files from a different directory.
+
+Only load pickle/joblib model files you trust: deserializing them can execute code.
+This path fix does not retrain the models, verify their provenance, change the
+preprocessing, or validate the performance figures above. Saved scikit-learn models
+may require the versions they were originally trained with.
+
+Path-only tests, which mock deserialization:
+
+```bash
+python -m unittest discover -s tests -v
+```
