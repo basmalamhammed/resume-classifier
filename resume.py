@@ -1,13 +1,16 @@
 import streamlit as st
-import joblib
 import re
 import pdfplumber
 import docx
 
-vectorizer = joblib.load(r"D:\Desktop\cv ml\.ipynb_checkpoints\vectorizer.pkl")
-le = joblib.load(r"D:\Desktop\cv ml\.ipynb_checkpoints\label_encoder.pkl")
-model = joblib.load(r"D:\Desktop\cv ml\.ipynb_checkpoints\knn_model.pkl")
-  
+from model_loader import load_models
+
+try:
+    vectorizer, le, model = load_models()
+except FileNotFoundError as exc:
+    st.error(str(exc))
+    st.stop()
+
 def cleanResume(resumeText):
     resumeText = re.sub('http\S+\s*',' ',resumeText)
     resumeText = re.sub('RT|cc',' ',resumeText)
